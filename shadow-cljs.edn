@@ -1,0 +1,9 @@
+;; shadow-cljs build for the FAMILY browser host adapter (ADR-2607023200 /
+;; ADR-2607100900 follow-up (b)). Same layout as the other portfolio
+;; titles' browser builds.
+{:deps   {:aliases [:cljs]}
+ :builds {:app {:target     :browser
+                :output-dir "public"
+                :asset-path "."
+                :modules    {:main {:init-fn ghosthacker-family.web/init}}
+                :dev-http   {8299 "public"}}}}
