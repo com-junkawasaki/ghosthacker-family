@@ -1,0 +1,28 @@
+{:schema "kotoba-ghosthacker-family-migration/v1"
+ :profile :ghosthacker-family/opening-week-v1
+ :legacy {:engine "src/ghosthacker_family/core.cljc"
+          :fixture "src/ghosthacker_family/days.cljc"
+          :status :retained-general-oracle}
+ :canonical {:engine "src/ghosthacker_family/bounded.kotoba"
+             :conformance "test/ghosthacker_family/bounded_conformance.kotoba"}
+ :domain {:days :opening-week :maximum-days 5
+          :allocation-encoding :flat-drinks-music-staff-care
+          :allocation-sum 10 :minimum-category-value 0}
+ :excluded [:arbitrary-day-sets :shift-allocation :terminal-input
+            :browser-state :persistence]
+ :safety {:ambient-authority false :host-capabilities [] :mutable-state false
+          :fuel {:initial 512 :replenishable false}
+          :incomplete-day false :negative-allocation false
+          :invalid-allocation-sum false :oversized-week false}
+ :verification {:legacy {:tests 12 :assertions 57 :failures 0 :errors 0}
+                :positive-cases [:exact-week :default-week :struggling-week
+                                 :partial-week :empty-week]
+                :negative-cases [:incomplete-day :negative-allocation
+                                 :invalid-allocation-sum :too-many-days]
+                :project-digest "e91d4a412aa786c3f945609e2967236fbf7c8f73a60e1d909638022d7a020694"
+                :web {:main 42 :summary-check 42 :reject-check 42
+                      :artifact-sha256 "dad37a0b719c1ee12788662803e7b218b166c2a5569c3525991673a9fe90afb3"}
+                :wasm {:main 42 :summary-check 42 :reject-check 42
+                       :artifact-sha256 "6af83bd35764f87a8364a045f4acc1ffd5da5d8487fdd453e9c834b89c0e59e3"}
+                :required-capabilities [] :hosted-ci :pending}
+ :cutover {:bounded-profile-authorized true :general-cljc-oracle-retained true}}

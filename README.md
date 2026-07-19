@@ -75,6 +75,11 @@ clojure -M:lint
 
 `main`へのpush/PRで `.github/workflows/test.yml` が自動でテスト+lintを実行する。
 
+`src/ghosthacker_family/bounded.kotoba`は固定5日の`opening-week`に対し、
+各日`drinks/music/staff-care`の非負整数3値・合計10を受け取るcapability-free
+Kotobaプロファイル。全週と途中終了を扱い、不完全な日、負値、合計違反、
+6日以上を拒否する。任意day set、allocation編集UI、host状態はCLJC oracleに残す。
+
 ターミナルで遊んでみる:
 
 ```bash
