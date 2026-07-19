@@ -24,5 +24,10 @@
                       :artifact-sha256 "dad37a0b719c1ee12788662803e7b218b166c2a5569c3525991673a9fe90afb3"}
                 :wasm {:main 42 :summary-check 42 :reject-check 42
                        :artifact-sha256 "6af83bd35764f87a8364a045f4acc1ffd5da5d8487fdd453e9c834b89c0e59e3"}
-                :required-capabilities [] :hosted-ci :pending}
+                :required-capabilities []
+                :hosted-ci
+                {:status :runner-billing-blocked
+                 :run "https://github.com/com-junkawasaki/ghosthacker-family/actions/runs/29697717087"
+                 :jdks [17 21] :jobs-started 0 :workflow-steps-executed 0
+                 :code-failure-evidence false :reverification-required true}}
  :cutover {:bounded-profile-authorized true :general-cljc-oracle-retained true}}
