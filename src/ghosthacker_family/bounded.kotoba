@@ -1,0 +1,89 @@
+(ns ghosthacker-family.bounded
+  (:export [play-opening-week]))
+
+(def state-type
+  [:record :ghosthacker-family/state
+   [[:funds :i64] [:family-bond :i64] [:day-index :i64]]])
+(def summary-type
+  [:record :ghosthacker-family/opening-week-summary
+   [[:funds :i64] [:family-bond :i64] [:bond-level :keyword]
+    [:grade :keyword] [:day-count :i64]]])
+(def summary-result-type [:result [:alias summary-type] :keyword])
+
+(defn fail [reason :keyword] [:alias summary-result-type]
+  (result-err-of summary-result-type reason))
+
+(defn magnitude [value :i64] :i64
+  (if (< value 0) (- value) value))
+
+(defn need-drinks [day :i64] :i64
+  (if (= day 0) 5 (if (= day 1) 4 (if (= day 2) 2 (if (= day 3) 5 3)))))
+(defn need-music [day :i64] :i64
+  (if (= day 0) 3 (if (= day 1) 4 (if (= day 2) 3 (if (= day 3) 4 3)))))
+(defn need-care [day :i64] :i64
+  (if (= day 0) 2 (if (= day 1) 2 (if (= day 2) 5 (if (= day 3) 1 4)))))
+
+(defn mismatch [day :i64 drinks :i64 music :i64 care :i64] :i64
+  (+ (magnitude (- drinks (need-drinks day)))
+     (magnitude (- music (need-music day)))
+     (magnitude (- care (need-care day)))))
+
+(defn judge [value :i64] :keyword
+  (if (<= value 2) :thriving (if (<= value 6) :steady :struggling)))
+
+(defn apply-outcome [state [:alias state-type] outcome :keyword]
+  [:alias state-type]
+  (let [funds (record-get state-type state :funds)
+        bond (record-get state-type state :family-bond)
+        day (record-get state-type state :day-index)]
+    (if (= outcome :thriving)
+      (record state-type (+ funds 300) (+ bond 3) (+ day 1))
+      (if (= outcome :steady)
+        (record state-type (+ funds 100) (+ bond 1) (+ day 1))
+        (record state-type (- funds 100) (- bond 2) (+ day 1))))))
+
+(defn allocations-valid? [values :vector-i64 offset :i64] :bool
+  (if (= offset (vector-count values)) true
+    (let [drinks (vector-at values offset)
+          music (vector-at values (+ offset 1))
+          care (vector-at values (+ offset 2))]
+      (if (or (< drinks 0) (< music 0)) false
+        (if (< care 0) false
+          (if (= (+ drinks music care) 10)
+            (allocations-valid? values (+ offset 3)) false))))))
+
+(defn play-from [values :vector-i64 offset :i64 state [:alias state-type]]
+  [:alias state-type]
+  (if (= offset (vector-count values)) state
+    (let [day (record-get state-type state :day-index)
+          drinks (vector-at values offset)
+          music (vector-at values (+ offset 1))
+          care (vector-at values (+ offset 2))]
+      (play-from values (+ offset 3)
+        (apply-outcome state (judge (mismatch day drinks music care)))))))
+
+(defn bond-level [bond :i64] :keyword
+  (if (>= bond 10) :found-family
+    (if (>= bond 4) :warming (if (>= bond 0) :fragile :estranged))))
+
+(defn grade [funds :i64 bond :i64] :keyword
+  (if (>= bond 10)
+    (if (>= funds 0) :s :a)
+    (if (and (>= funds 0) (>= bond 4)) :b
+      (if (>= bond 0) :c :d))))
+
+(defn finish [state [:alias state-type]] [:alias summary-result-type]
+  (let [funds (record-get state-type state :funds)
+        bond (record-get state-type state :family-bond)
+        day (record-get state-type state :day-index)]
+    (result-ok-of summary-result-type
+      (record summary-type funds bond (bond-level bond) (grade funds bond) day))))
+
+(defn play-opening-week [allocations :vector-i64] [:alias summary-result-type]
+  (if (> (vector-count allocations) 15) (fail :too-many-days)
+    (if (= (- (vector-count allocations)
+               (* (quot (vector-count allocations) 3) 3)) 0)
+      (if (allocations-valid? allocations 0)
+        (finish (play-from allocations 0 (record state-type 0 0 0)))
+        (fail :invalid-allocation))
+      (fail :incomplete-day))))

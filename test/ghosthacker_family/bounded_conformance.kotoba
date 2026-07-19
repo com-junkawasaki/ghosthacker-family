@@ -1,0 +1,52 @@
+(ns ghosthacker-family.bounded-conformance
+  (:require [ghosthacker-family.bounded :as bounded])
+  (:export [main summary-check reject-check]))
+
+(def summary-type
+  [:record :ghosthacker-family/opening-week-summary
+   [[:funds :i64] [:family-bond :i64] [:bond-level :keyword]
+    [:grade :keyword] [:day-count :i64]]])
+(def summary-result-type [:result [:alias summary-type] :keyword])
+
+(defn expected-funds [case-id :i64] :i64
+  (if (= case-id 0) 1500 (if (= case-id 1) 1100 (if (= case-id 2) -500 (if (= case-id 3) 300 0)))))
+(defn expected-bond [case-id :i64] :i64
+  (if (= case-id 0) 15 (if (= case-id 1) 11 (if (= case-id 2) -10 (if (= case-id 3) 3 0)))))
+(defn expected-bond-level [case-id :i64] :keyword
+  (if (or (= case-id 0) (= case-id 1)) :found-family
+    (if (= case-id 2) :estranged :fragile)))
+(defn expected-grade [case-id :i64] :keyword
+  (if (or (= case-id 0) (= case-id 1)) :s (if (= case-id 2) :d :c)))
+(defn expected-days [case-id :i64] :i64
+  (if (or (= case-id 0) (= case-id 1)) 5 (if (= case-id 2) 5 (if (= case-id 3) 1 0))))
+
+(defn summary-check [allocations :vector-i64 case-id :i64] :i64
+  (match-result (bounded/play-opening-week allocations) summary-result-type
+    (ok summary
+      (if (= (expected-funds case-id) (record-get summary-type summary :funds))
+        (if (= (expected-bond case-id) (record-get summary-type summary :family-bond))
+          (if (= (expected-bond-level case-id) (record-get summary-type summary :bond-level))
+            (if (= (expected-grade case-id) (record-get summary-type summary :grade))
+              (if (= (expected-days case-id) (record-get summary-type summary :day-count)) 42 5)
+              4)
+            3)
+          2)
+        1))
+    (err reason 90)))
+
+(defn reject-check [allocations :vector-i64] :i64
+  (match-result (bounded/play-opening-week allocations) summary-result-type
+    (ok unexpected 1)
+    (err reason 42)))
+
+(defn main [] :i64
+  (if (= 42 (summary-check
+              (vector-i64 5 3 2 4 4 2 2 3 5 5 4 1 3 3 4)
+              0))
+    (if (= 42 (summary-check
+                (vector-i64 4 3 3 4 3 3 4 3 3 4 3 3 4 3 3)
+                1))
+      (if (= 42 (summary-check (vector-i64 5 3 2) 3))
+        42 3)
+      2)
+    1))
