@@ -17,8 +17,9 @@
 (def ^:private play-loop! #'terminal/play-loop!)
 
 (defn- silently [thunk]
-  (binding [*out* (java.io.StringWriter.)]
-    (thunk)))
+  (let [result (atom nil)]
+    (with-out-str (reset! result (thunk)))
+    @result))
 
 (deftest reception-pct-boundary-test
   (testing "ぴったりなら100%、mismatchが最大(2*total-attention)なら0%"
