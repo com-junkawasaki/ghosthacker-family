@@ -10,7 +10,7 @@
   feel) sounds right.
 
   Run: clojure -M -m ghosthacker-family.terminal"
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [ghosthacker-family.core :as core]
             [ghosthacker-family.days :as days]))
 
@@ -47,7 +47,7 @@
 
 (defn- read-command! []
   (print "[dm/ds/md/ms/sd/sm/l/q] > ") (flush)
-  (some-> (read-line) str/trim str/lower-case))
+  (some-> (read-line) str/trim str/lower))
 
 (defn- tend-day!
   "1日ぶんの配分調整ループ。l/空行でロックイン(allocationを返す)、
