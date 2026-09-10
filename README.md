@@ -36,7 +36,7 @@ Ghost Hacker ゲームポートフォリオ第5弾。設計は
 
 ## 実装範囲
 
-`src/ghosthacker_family/core.cljc` — pure、host-free。判定/state核:
+`src/ghosthacker_family/core.kotoba` — pure、host-free。判定/state核:
 
 - `shift-allocation` — allocationの2カテゴリ間でattention pointを移動する
   （移動元残量・負値の両方をclampし、合計`total-attention`という不変
@@ -47,16 +47,16 @@ Ghost Hacker ゲームポートフォリオ第5弾。設計は
   全日程消化判定（このcore唯一の日次state遷移関数）
 - `bond-level`/`grade`/`summary` — リザルト画面向けのサマリ
 
-`src/ghosthacker_family/days.cljc` — サンプルの完結した5日程
+`src/ghosthacker_family/days.kotoba` — サンプルの完結した5日程
 （`opening-week`）。
 
-**プレイ可能な最小プロトタイプ**として `src/ghosthacker_family/terminal.clj`
+**プレイ可能な最小プロトタイプ**として `src/ghosthacker_family/terminal.kotoba`
 がある。TUNINGと同様、実時間の判定が無いため`future`/agentスレッドプールを
 一切使わない素朴なshift&lockのREPLループ。目標配分(`:need`)は直接表示せず、
 `reception`（近さのみを示す0〜100%、方向は教えない）だけを手がかりに、
 店の空気を読むような手触りにしている。
 
-**ブラウザで遊べるホストアダプタ**が `src/ghosthacker_family/web.cljs`
+**ブラウザで遊べるホストアダプタ**が `src/ghosthacker_family/web.kotoba`
 （reagent、ADR-2607100900 follow-up (b)）: FAMILYはリアルタイムの判定が
 無いため、ECHOES/TUNINGと同じ低複雑度側の構成（Web Audio不要、ボタン
 駆動のshift/lock UI）で足りる。

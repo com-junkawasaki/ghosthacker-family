@@ -1,7 +1,7 @@
 {:schema "kotoba-ghosthacker-family-migration/v1"
  :profile :ghosthacker-family/opening-week-v1
- :legacy {:engine "src/ghosthacker_family/core.cljc"
-          :fixture "src/ghosthacker_family/days.cljc"
+ :legacy {:engine "src/ghosthacker_family/core.kotoba"
+          :fixture "src/ghosthacker_family/days.kotoba"
           :status :retained-general-oracle}
  :canonical {:engine "src/ghosthacker_family/bounded.kotoba"
              :conformance "test/ghosthacker_family/bounded_conformance.kotoba"}
