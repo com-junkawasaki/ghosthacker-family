@@ -16,5 +16,5 @@ pure `.cljc` 経営シム核（`ghosthacker-family.core`）と、それを使う
   境界・judge-mismatch/judge-dayの3段階境界・resolve-day/complete?・
   bond-level/gradeの閾値・play/play-summary）+ `terminal_test.clj`
   （private var経由でreception-pct/tend-day!/play-loop!を直接検証、
-  すべて整数値のためfloat epsilon比較は不要）。`clojure -M:lint`
-  0エラー/0警告、`npx shadow-cljs compile app` 0警告を確認。
+  すべて整数値のためfloat epsilon比較は不要）。`kbb -M:lint`
+  0エラー/0警告、`amu compile --target wasm32-browser app` 0警告を確認。

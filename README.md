@@ -64,13 +64,13 @@ Ghost Hacker ゲームポートフォリオ第5弾。設計は
 ## 開発
 
 ```bash
-clojure -M:test
+kbb -M:test
 ```
 
 Lint（clj-kondo、Clojars経由でHomebrew等の別インストール不要）:
 
 ```bash
-clojure -M:lint
+kbb -M:lint
 ```
 
 `main`へのpush/PRで `.github/workflows/test.yml` が自動でテスト+lintを実行する。
@@ -83,15 +83,15 @@ Kotobaプロファイル。全週と途中終了を扱い、不完全な日、�
 ターミナルで遊んでみる:
 
 ```bash
-clojure -M -m ghosthacker-family.terminal
+kbb -M -m ghosthacker-family.terminal
 ```
 
 ブラウザで遊んでみる（`npm install`は初回のみ）:
 
 ```bash
 npm install
-npx shadow-cljs watch app   # http://localhost:8299 で自動リロード開発
-npx shadow-cljs release app # public/ に静的バンドルをビルド(デプロイ可能)
+amu compile --target wasm32-browser app   # http://localhost:8299 で自動リロード開発
+amu compile --target wasm32-browser app # public/ に静的バンドルをビルド(デプロイ可能)
 ```
 
 変更履歴は [CHANGELOG.md](CHANGELOG.md)。

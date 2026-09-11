@@ -9,7 +9,7 @@
   'reception' readout (proximity only, no direction -- read the room by
   feel) sounds right.
 
-  Run: clojure -M -m ghosthacker-family.terminal"
+  Run: kbb -M -m ghosthacker-family.terminal"
   (:require [kotoba.lang.text :as str]
             [ghosthacker-family.core :as core]
             [ghosthacker-family.days :as days]))
@@ -85,7 +85,7 @@
             (recur next-state)))))))
 
 (defn -main
-  "Entry point for `clojure -M -m ghosthacker-family.terminal`."
+  "Entry point for `kbb -M -m ghosthacker-family.terminal`."
   [& _args]
   (println "GHOST HACKER: FAMILY — opening-week")
   (println "各日のreceptionが最大になるよう配点を移動し、l でロックイン。")
